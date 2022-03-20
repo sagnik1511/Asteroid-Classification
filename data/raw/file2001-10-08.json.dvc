@@ -1,0 +1,4 @@
+outs:
+- md5: 15b1ab059234bf90801d50b2969f4e16
+  size: 10096
+  path: file2001-10-08.json
