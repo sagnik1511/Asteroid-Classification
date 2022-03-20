@@ -84,3 +84,6 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+# Raw JSON files
+data/raw/*json
