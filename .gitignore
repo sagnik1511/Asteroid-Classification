@@ -87,3 +87,6 @@ target/
 
 # Raw JSON files
 data/raw/*json
+
+# CSV files
+*csv
