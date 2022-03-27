@@ -90,3 +90,6 @@ data/raw/*json
 
 # CSV files
 *csv
+
+# pkl files
+*pkl

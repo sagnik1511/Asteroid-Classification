@@ -3,31 +3,35 @@ import sys
 import yaml
 import argparse
 from pathlib import Path
-sys.path.append("../asteroid_classification")
-from src.utils.utils import *
+import pandas as pd
+sys.path.append("../asteroid_classification/src")
+from utils.utils import *
 
 
 def preprocessing(train_dataframe, test_dataframe, job_config):
     # creating a copy of both dataset
+    print("Creating copy of both dataset ...")
     train_data, test_data = train_dataframe.copy(), test_dataframe.copy()
 
     # performing attribute_extraction
+    print("Performing attribute extraction ...")
     train_data = attribute_extraction(train_data)
     test_data = attribute_extraction(test_data)
 
     # processing time feature
+    print("Processing datetime features")
     train_data = process_orb_det_time(train_data)
     test_data = process_orb_det_time(test_data)
-
-    # processing another time feature
     train_data = process_capture_date(train_data)
     test_data = process_capture_date(test_data)
 
     # omitting unused / unwanted features
+    print("Filtering required columns")
     train_data.drop(job_config["unused_cols"], axis=1, inplace=True)
     test_data.drop(job_config["unused_cols"], axis=1, inplace=True)
 
     # encoding categorical columns
+    print("Encoding ...")
     for fet in job_config["obj_cols"]:
         train_data[fet], test_data[fet] = encode(train_data[fet], test_data[fet])
 
@@ -41,6 +45,7 @@ def preprocessing(train_dataframe, test_dataframe, job_config):
             test_data[fet] = test_data[fet].astype("float")
 
     # performing standard scaling
+    print("Performing scaling ...")
     for fet in job_config["scaling"]:
         train_data, test_data = scaling(train_data, test_data, fet)
 
@@ -66,6 +71,7 @@ def process_data(conf_path):
     assert os.path.isfile(test_data_base_path), "test set not found!!!"
 
     # loading input data
+    print("Loading data ...")
     train_df = pd.read_csv(train_data_base_path)
     test_df = pd.read_csv(test_data_base_path)
 
@@ -77,6 +83,7 @@ def process_data(conf_path):
     test_op_path = job_config["output_path"]["test_set"]
 
     # storing the outputs
+    print("Storing processed data ...")
     train_df.to_csv(train_op_path, index=False)
     test_df.to_csv(test_op_path, index=False)
 
@@ -90,3 +97,5 @@ if __name__ == "__main__":
 
     # calling preprocessing
     process_data(args.conf)
+
+    print("Process completed successfully...")

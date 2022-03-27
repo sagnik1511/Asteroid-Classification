@@ -1,7 +1,10 @@
+import os
 import json
+import pickle
 import numpy as np
 import pandas as pd
 from ast import literal_eval
+from scipy.stats import zscore
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 
@@ -10,6 +13,7 @@ MASTER_DF_COLUMNS = ["id", "date", "name", "absolute_magnitude", "diameter",
 
 
 def fetch_single_record(data, index, master_index):
+    # extracting attributes
     date = str(list(data["near_earth_objects"].keys())[0])
     inner_records = data["near_earth_objects"][date][index]
     ref_id = str(inner_records["neo_reference_id"])
@@ -21,6 +25,7 @@ def fetch_single_record(data, index, master_index):
     orb_data = str(inner_records["orbital_data"])
     is_hazardous = str(inner_records["is_potentially_hazardous_asteroid"])
 
+    # loading attributes in a pandas.DataFrame
     single_record = pd.DataFrame(
         {
             "id": ref_id,
@@ -118,11 +123,11 @@ def dict_to_pd(data):
 
 def encode(train_feature, test_feature):
     # defining encoder
-    scaler = LabelEncoder()
+    encoder = LabelEncoder()
 
     # fitting on train data and updating on both dataset
-    train_feature = scaler.fit_transform(train_feature)
-    test_feature = scaler.transform(test_feature)
+    train_feature = encoder.fit_transform(train_feature)
+    test_feature = encoder.transform(test_feature)
 
     return train_feature, test_feature
 
@@ -211,3 +216,41 @@ def attribute_extraction(dataframe):
     data = pd.concat([data, process_orb_data(data)], axis=1)
 
     return data
+
+
+def store_artifact(model, directory):
+    # fetching file name
+    filename = f"{len(os.listdir(directory)) + 1}.pkl"
+    path = os.path.join(directory, filename)
+
+    # loading the trained model on a pickle file
+    with open(path, "wb") as f:
+        pickle.dump(model, f)
+        f.close()
+    print(f"Model saved as {path} ...")
+
+
+def omit_outliers(dataframe, threshold=3.0):
+    # creating copy of the dataset
+    data = dataframe.copy()
+
+    # finding absolute zscore of the values
+    abs_z_scores = np.abs(zscore(data))
+
+    # storing filtered rows
+    filtered_rows = (abs_z_scores < threshold).all(axis=1)
+
+    # fetching filtered dataframe
+    filtered_df = data[filtered_rows]
+
+    return filtered_df
+
+
+def save_data(data, filename):
+    x, y = data
+    x = pd.DataFrame(x)
+    y = pd.DataFrame(y)
+
+    pd.concat([x, y], axis=1).to_csv(filename, index=False)
+    print(f"Process Data stored at {filename} ...")
+
