@@ -11,5 +11,4 @@ git clone https://github.com/sagnik1511/Tabular-AutoML.git
 ```shell
 pip install -r requirements.txt
 ```
-5. Installing the requirements.txt may generate some error due to outdated.
-6. MS Visual C++ Build. You can fix this problem using [this](https://www.youtube.com/watch?v=rcI1_e38BWs).
+5. Installing the requirements.txt may generate some error due to outdated MS Visual C++ Build. You can fix this problem using [this](https://www.youtube.com/watch?v=rcI1_e38BWs).
