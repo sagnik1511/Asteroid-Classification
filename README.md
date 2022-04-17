@@ -66,7 +66,7 @@ and in [commands.md](https://github.com/sagnik1511/Asteroid-Classification/blob/
 Will update soon :)
 
 # Results:
-Will update soon :)
+You can visit [reports](https://github.com/sagnik1511/Asteroid-Classification/tree/dev/reports) directory where all the runs are stored. Currently, for some privacy issues, the mlflow runs are not shared in here.
 
 <div align="center">
 <h1>Thanks for visiting :D</h1>
