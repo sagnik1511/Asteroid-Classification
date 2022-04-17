@@ -1,0 +1,4 @@
+Training Accuracy : 99.663677  ||  Validation Accuracy : 34.080717  ||  Testing Accuracy : 37.332340
+Training Precision : 99.663931  ||  Validation Precision : 34.311197  ||  Testing Precision : 37.327967
+Training Recall : 99.663677  ||  Validation Recall : 34.080717  ||  Testing Recall : 37.332340
+Training F1 Score : 99.663617  ||  Validation F1 Score : 33.928577  ||  Testing F1 Score : 36.319592

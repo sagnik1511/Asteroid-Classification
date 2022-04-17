@@ -35,6 +35,7 @@ def training(model_config, train, val, test):
 
     # storing retrained best estimator and training metrics
     print("Finding best estimator and retraining for artifact storing ...")
+    best_params = gcv_model.best_params_
     best_estimator = gcv_model.best_estimator_
     print(f"best estimator found : {best_estimator}")
     best_estimator.fit(x_train, y_train)
@@ -44,7 +45,7 @@ def training(model_config, train, val, test):
         os.mkdir(report_output_directory)
     if not os.path.isdir(artifact_output_directory):
         os.mkdir(artifact_output_directory)
-    make_training_report(gcv_model, x_train, y_train, x_val, y_val, x_test, y_test, report_output_directory)
+    make_training_report(gcv_model, x_train, y_train, x_val, y_val, x_test, y_test, report_output_directory, best_params)
     store_artifact(best_estimator, artifact_output_directory)
 
 

@@ -93,3 +93,12 @@ data/raw/*json
 
 # pkl files
 *pkl
+
+# mlflow runs
+mlruns/
+
+# virtual env
+venv/
+
+# test files
+global_test.py
