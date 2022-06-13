@@ -21,7 +21,17 @@ def run_mlflow_logger(model, params, metric_scores, set_names, metric_names):
         mlflow.end_run()
 
 
-def make_training_report(model, x_train, y_train, x_val, y_val, x_test, y_test, directory, best_params):
+def make_training_report(model,
+                         x_train,
+                         y_train,
+                         x_val,
+                         y_val,
+                         x_test,
+                         y_test,
+                         directory,
+                         best_params,
+                         connect_mlflow_logger=True):
+
     filename = f"{len(os.listdir(directory)) + 1}.txt"
     path = os.path.join(directory, filename)
     with open(path, "wt") as file:
@@ -60,11 +70,11 @@ def make_training_report(model, x_train, y_train, x_val, y_val, x_test, y_test, 
 
         file.close()
         print(f"report saved at {path}")
+        if connect_mlflow_logger:
+            set_names = ["train", "val", "test"]
+            metric_names = ["accuracy", "precision", "recall", "f1_score"]
+            metric_scores = [[train_acc, train_p, train_r, train_f1],
+                                [val_acc, val_p, val_r, val_f1],
+                                [test_acc, test_p, test_r, test_f1]]
 
-        set_names = ["train", "val", "test"]
-        metric_names = ["accuracy", "precision", "recall", "f1_score"]
-        metric_scores = [[train_acc, train_p, train_r, train_f1],
-                            [val_acc, val_p, val_r, val_f1],
-                            [test_acc, test_p, test_r, test_f1]]
-
-        run_mlflow_logger(model, best_params, metric_scores, set_names, metric_names)
+            run_mlflow_logger(model, best_params, metric_scores, set_names, metric_names)

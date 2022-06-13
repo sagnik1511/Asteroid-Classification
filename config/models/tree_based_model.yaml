@@ -21,3 +21,6 @@ output_artifact_dir:
   models/
 output_artifact_report_dir:
   reports/training/
+figures:
+  roc_curve:
+    reports/figures/

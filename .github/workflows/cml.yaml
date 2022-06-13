@@ -1,0 +1,15 @@
+name: CI_test_pipeline1
+on:
+  pull_request:
+    branches: '*'
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: iterative/setup-cml@v1
+      - name: Run test
+        run: |
+          # Your ML workflow goes here
+          pip install -r requirements.txt
+          python ci_check.py
