@@ -12,4 +12,4 @@ jobs:
         run: |
           pwd
           pip install -r requirements.txt
-          python -m src.tests.ci_check.py
+          python -m src.tests.ci_check
