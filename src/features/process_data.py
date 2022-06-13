@@ -1,11 +1,7 @@
-import os
-import sys
 import yaml
 import argparse
 from pathlib import Path
-import pandas as pd
-sys.path.append("../asteroid_classification/src")
-from utils.utils import *
+from src.utils.utils import *
 
 
 def preprocessing(train_dataframe, test_dataframe, job_config):

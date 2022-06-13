@@ -1,5 +1,3 @@
-import sys
-sys.path.append("src")
 from src.models.custom_classifier_training import classifier_training
 
 

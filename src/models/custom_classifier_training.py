@@ -1,5 +1,4 @@
 import os
-import sys
 import yaml
 import argparse
 import pandas as pd
@@ -7,10 +6,9 @@ from pathlib import Path
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import VarianceThreshold
-sys.path.append("src")
-from models.model_warehouse import warehouse_dict
-from utils.utils import store_artifact, omit_outliers, save_data
-from models.metrics import make_training_report
+from src.models.model_warehouse import warehouse_dict
+from src.utils.utils import store_artifact, omit_outliers, save_data
+from src.models.metrics import make_training_report
 
 
 def training(model_config, train, val, test, testing=False):
@@ -58,7 +56,6 @@ def training(model_config, train, val, test, testing=False):
         roc_curve_dir = os.path.join("reports/figures", "training_report")
     if not testing:
         store_artifact(best_estimator, artifact_output_directory)
-
 
 
 def load_and_hot_process(process_config):
