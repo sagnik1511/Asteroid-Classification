@@ -10,6 +10,6 @@ jobs:
       - uses: iterative/setup-cml@v1
       - name: Run test
         run: |
-          # Your ML workflow goes here
+          pwd
           pip install -r requirements.txt
           python3 src/tests/ci_check.py
