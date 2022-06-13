@@ -12,4 +12,4 @@ jobs:
         run: |
           # Your ML workflow goes here
           pip install -r requirements.txt
-          python ci_check.py
+          python src/tests/ci_check.py
