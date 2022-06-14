@@ -15,5 +15,4 @@ jobs:
         run: |
           pip install dvc[gdrive]
           pip install -r requirements.txt
-          dvc pull
           python -m src.tests.ci_check
