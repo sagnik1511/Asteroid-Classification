@@ -87,3 +87,20 @@ target/
 
 # Raw JSON files
 data/raw/*json
+
+# CSV files
+*train.csv
+*val.csv
+*test.csv
+
+# pkl files
+*pkl
+
+# mlflow runs
+mlruns/
+
+# virtual env
+venv/
+
+# test files
+global_test.py

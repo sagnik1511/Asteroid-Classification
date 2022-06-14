@@ -1,0 +1,4 @@
+data_split:
+  train_size : 0.8
+  test_size : 0.2
+root_dir: data/raw

@@ -1,0 +1,45 @@
+input_path:
+  train_set:
+    data/primary/train.csv
+  test_set:
+    data/primary/test.csv
+output_path:
+  train_set:
+    data/interim/train.csv
+  test_set:
+    data/interim/test.csv
+unused_cols:
+  - diameter
+  - id
+  - name
+  - orbital_data
+  - date
+  - orbit_determination_date
+  - orb_date
+  - orb_time
+obj_cols:
+  - equinox
+date_time_cols:
+  - date
+  - orbit_determination_date
+scaling:
+  - absolute_magnitude
+  - relative_velocity
+  - miss_distance
+  - max_diameter
+  - min_diameter
+  - orbit_uncertainty
+  - minimum_orbit_intersection
+  - jupiter_tisserand_invariant
+  - epoch_osculation
+  - eccentricity
+  - semi_major_axis
+  - inclination
+  - ascending_node_longitude
+  - orbital_period
+  - perihelion_distance
+  - perihelion_argument
+  - aphelion_distance
+  - perihelion_time
+  - mean_anomaly
+  - mean_motion
