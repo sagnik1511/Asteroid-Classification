@@ -89,7 +89,9 @@ target/
 data/raw/*json
 
 # CSV files
-*csv
+*train.csv
+*val.csv
+*test.csv
 
 # pkl files
 *pkl

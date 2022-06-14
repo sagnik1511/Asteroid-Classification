@@ -1,5 +1,4 @@
 import os
-import sys
 import yaml
 import argparse
 import pandas as pd
@@ -7,13 +6,12 @@ from pathlib import Path
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import VarianceThreshold
-sys.path.append("../asteroid_classification/src")
-from models.model_warehouse import warehouse_dict
-from utils.utils import store_artifact, omit_outliers, save_data
-from models.metrics import make_training_report
+from src.models.model_warehouse import warehouse_dict
+from src.utils.utils import store_artifact, omit_outliers, save_data
+from src.models.metrics import make_training_report
 
 
-def training(model_config, train, val, test):
+def training(model_config, train, val, test, testing=False):
     # fetching tuning parameters
     params = model_config["params"]
 
@@ -39,14 +37,25 @@ def training(model_config, train, val, test):
     best_estimator = gcv_model.best_estimator_
     print(f"best estimator found : {best_estimator}")
     best_estimator.fit(x_train, y_train)
-    report_output_directory = os.path.join(model_config["output_artifact_report_dir"], base_model_name)
-    artifact_output_directory = os.path.join(model_config["output_artifact_dir"], base_model_name)
+    if not testing:
+        report_output_directory = os.path.join(model_config["output_artifact_report_dir"], base_model_name)
+    else:
+        report_output_directory = os.path.join("reports/figures", "training_report")
     if not os.path.isdir(report_output_directory):
         os.mkdir(report_output_directory)
+    make_training_report(gcv_model, x_train, y_train,
+                         x_val, y_val, x_test, y_test,
+                         report_output_directory,
+                         best_params, connect_mlflow_logger=testing)
+    artifact_output_directory = os.path.join(model_config["output_artifact_dir"], base_model_name)
     if not os.path.isdir(artifact_output_directory):
         os.mkdir(artifact_output_directory)
-    make_training_report(gcv_model, x_train, y_train, x_val, y_val, x_test, y_test, report_output_directory, best_params)
-    store_artifact(best_estimator, artifact_output_directory)
+    if not testing:
+        roc_curve_dir = os.path.join(model_config["figures"]["roc_curve"])
+    else:
+        roc_curve_dir = os.path.join("reports/figures", "training_report")
+    if not testing:
+        store_artifact(best_estimator, artifact_output_directory)
 
 
 def load_and_hot_process(process_config):
@@ -84,7 +93,7 @@ def load_and_hot_process(process_config):
     return (x_train, y_train), (x_val, y_val), (test_vector, y_test)
 
 
-def classifier_training(process_config_path, model_config_path):
+def classifier_training(process_config_path, model_config_path, testing=False):
     # validating if the config is present or not
     if not os.path.isfile(process_config_path):
         print("Processing config file not found!!!")
@@ -103,16 +112,17 @@ def classifier_training(process_config_path, model_config_path):
     train, val, test = load_and_hot_process(process_config)
 
     # training and storing all necessary details
-    training(model_config, train, val, test)
+    training(model_config, train, val, test, testing=testing)
 
-    # storing processed data
-    train_op_path = process_config["output_path"]["train_set"]
-    val_op_path = process_config["output_path"]["val_set"]
-    test_op_path = process_config["output_path"]["test_set"]
+    if not testing:
+        # storing processed data
+        train_op_path = process_config["output_path"]["train_set"]
+        val_op_path = process_config["output_path"]["val_set"]
+        test_op_path = process_config["output_path"]["test_set"]
 
-    save_data(train, train_op_path)
-    save_data(val, val_op_path)
-    save_data(test, test_op_path)
+        save_data(train, train_op_path)
+        save_data(val, val_op_path)
+        save_data(test, test_op_path)
 
 
 if __name__ == "__main__":

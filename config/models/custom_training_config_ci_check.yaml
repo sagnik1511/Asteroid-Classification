@@ -1,0 +1,16 @@
+input_path:
+  train_set:
+    data/interim/train_small.csv
+  test_set:
+    data/interim/test_small.csv
+output_path:
+  train_set:
+    data/processed/train_small.csv
+  val_set:
+    data/processed/val_small.csv
+  test_set:
+    data/processed/test_small.csv
+preprocess:
+  variance_threshold: 0.99
+  zscore: 10
+train_val_split: 0.2
